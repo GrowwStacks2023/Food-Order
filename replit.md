@@ -47,7 +47,7 @@ Preferred communication style: Simple, everyday language.
 - **Drizzle Kit**: Migration tool (`db:push` command for schema sync)
 
 ### Third-Party Services
-- **AI Recommendations Webhook**: External n8n automation service at `https://n8nadmin.1automation.us/webhook/...` receives cart data and returns product recommendations
+- **AI Recommendations Webhook**: External n8n automation service at `https://n8nadmin.1automation.us/webhook/1eb14931-a1ae-4a8b-bbff-0b8df36e18d9` receives cart data and returns product recommendations. The backend includes a 10-second timeout and falls back to curated recommendations if the webhook fails.
 
 ### Key NPM Packages
 - **@tanstack/react-query**: Server state management and caching
