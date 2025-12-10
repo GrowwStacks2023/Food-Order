@@ -1,0 +1,165 @@
+Create a sophisticated restaurant ordering web application with the following specifications:
+
+## CORE FEATURES
+
+### 1. Menu Structure
+- Create [NUMBER] main category cards: [LIST CATEGORIES]
+  Example: Starters, Main Course, Desserts, Drinks, Chef's Special
+- Each category should have [NUMBER] products with:
+  - Product ID
+  - Name
+  - Description (1-2 sentences)
+  - Price
+  - High-quality food image
+- Display categories as clickable cards on the home screen
+- When a category is clicked, show full product list for that category
+- Include a "Back to Menu" button to return to categories
+
+### 2. Cart System
+- Fixed header with cart button showing item count badge
+- When cart button is clicked, slide-in sidebar from right showing:
+  - List of all cart items with images, names, descriptions, prices
+  - Remove button for each item (trash icon)
+  - Price breakdown:
+    * Subtotal
+    * Tax ([PERCENTAGE]%)
+    * Total amount
+  - Prominent "Proceed to Checkout" button
+- Empty cart state with icon and "Browse Menu" call-to-action
+- Real-time cart count updates
+- Toast notifications for add/remove actions
+
+### 3. AI-Powered Recommendations (Webhook Integration)
+- When user adds item to cart, trigger webhook with:
+  - food_item_id
+  - item_name
+  - item_price
+  - category
+  - current_cart_items
+  - timestamp
+- Show loading state while waiting for response
+- Display recommendations in elegant sidebar with:
+  - Recommendation badge with reason ("Perfect pairing", "Complete your meal", etc.)
+  - Product image, name, description
+  - Price
+  - "Add to Cart" and "Maybe Later" buttons
+- Webhook URL placeholder: [YOUR_WEBHOOK_URL]
+- Expected response format:
+```json
+  [
+    {
+      "id": "product_id",
+      "name": "Product Name",
+      "description": "Product description",
+      "price": 00.00,
+      "image": "image_url",
+      "reason": "Why this is recommended"
+    }
+  ]
+```
+
+### 4. User Interface & Design
+- Design aesthetic: [CHOOSE ONE]
+  * Editorial/Magazine (elegant serif + modern sans-serif)
+  * Modern Minimalist (clean lines, lots of white space)
+  * Luxury/Refined (gold accents, elegant typography)
+  * Playful/Fun (bright colors, rounded elements)
+  * Dark/Moody (dark background, dramatic lighting)
+  * Rustic/Organic (earth tones, natural textures)
+
+- Typography:
+  * Heading font: [DISTINCTIVE SERIF OR DISPLAY FONT - NOT Inter/Roboto/Arial]
+  * Body font: [CLEAN SANS-SERIF - NOT system fonts]
+  * Use Google Fonts for easy implementation
+
+- Color scheme:
+  * Primary color: [COLOR] (for CTAs, accents)
+  * Secondary color: [COLOR] (for headings, important text)
+  * Background: [COLOR]
+  * Text: [DARK COLOR for body, LIGHTER for secondary text]
+
+- Animations & Interactions:
+  * Smooth sidebar slide-ins (500ms cubic-bezier)
+  * Fade-in animations for category cards (staggered delays)
+  * Hover effects on all interactive elements
+  * Bouncing animation for cart badge when items added
+  * Smooth transitions for all state changes
+
+### 5. Technical Requirements
+- Single HTML file with embedded CSS and JavaScript
+- No external dependencies except:
+  * Google Fonts (2 fonts maximum)
+  * Unsplash images for product photos (or placeholder)
+- Fully responsive (mobile, tablet, desktop)
+- Clean, well-commented code
+- Production-ready quality
+
+### 6. Additional Features [OPTIONAL - CHOOSE AS NEEDED]
+- [ ] Quantity controls for each cart item
+- [ ] Search/filter products by name or category
+- [ ] Dietary filters (vegetarian, vegan, gluten-free, etc.)
+- [ ] Special instructions text field in cart
+- [ ] Tip selection (15%, 18%, 20%, Custom)
+- [ ] Delivery/Pickup toggle
+- [ ] Table number input for dine-in
+- [ ] Promo code input field
+- [ ] Order history (stored in localStorage)
+- [ ] Favorites/Save for later functionality
+- [ ] Time slot selection for pickup/delivery
+- [ ] Multi-language support
+
+## CUSTOMIZATION VARIABLES
+
+Replace these placeholders with your specific requirements:
+
+- **Restaurant Name**: [YOUR RESTAURANT NAME]
+- **Tagline**: [YOUR TAGLINE]
+- **Number of Categories**: [5-10]
+- **Products per Category**: [4-8]
+- **Tax Rate**: [8-15%]
+- **Currency Symbol**: [$, €, £, ₹, etc.]
+- **Webhook URL**: [YOUR_WEBHOOK_ENDPOINT]
+- **Checkout Webhook URL**: [YOUR_CHECKOUT_ENDPOINT]
+
+## EXAMPLE CATEGORIES & PRODUCTS
+
+Provide your menu structure like this:
+
+**Starters:**
+1. Bruschetta Trio - Three varieties: classic tomato, mushroom truffle, and ricotta with honey - $12.99
+2. Crispy Calamari - Tender calamari rings with zesty lemon aioli and marinara - $14.99
+3. [Add more items...]
+
+**Main Course:**
+1. Grilled Salmon - Atlantic salmon with herb butter, asparagus, and lemon risotto - $26.99
+2. [Add more items...]
+
+[Continue for all categories...]
+
+## SMART RECOMMENDATION LOGIC
+
+Define pairing rules:
+- If user adds [STARTER], recommend [MAIN COURSE] because [REASON]
+- If user adds [MAIN], recommend [DESSERT] + [DRINK] because [REASON]
+- If user adds [SPECIAL], recommend [PREMIUM_WINE] because [REASON]
+
+Example:
+- Bruschetta → Mushroom Risotto (vegetarian pairing)
+- Ribeye Steak → Chocolate Lava Cake + Red Wine (rich finish for hearty meal)
+- Lobster Thermidor → Champagne (luxury pairing)
+
+## DELIVERABLES
+
+Please provide:
+1. Complete HTML file with all features implemented
+2. Clean, well-structured code with comments
+3. Responsive design that works on all devices
+4. Smooth animations and polished UI
+5. Instructions for webhook integration
+6. Code snippets for connecting to real backend/API
+
+## NOTES
+- Prioritize elegant, distinctive design over generic "AI-generated" aesthetics
+- Ensure all animations are smooth and purposeful
+- Make the app feel premium and professional
+- Focus on user experience and intuitive navigation
