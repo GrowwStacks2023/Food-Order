@@ -1,16 +1,6 @@
-import type { Category, MenuItem, Recommendation } from "@shared/schema";
-import { randomUUID } from "crypto";
+import type { Category, MenuItem } from "@shared/schema";
 
-export interface IStorage {
-  getCategories(): Promise<Category[]>;
-  getMenuItems(): Promise<MenuItem[]>;
-  getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]>;
-  getMenuItemById(itemId: string): Promise<MenuItem | undefined>;
-  getCategoryById(categoryId: string): Promise<Category | undefined>;
-  getRecommendations(itemId: string, categoryId: string): Promise<Recommendation[]>;
-}
-
-const categories: Category[] = [
+export const categories: Category[] = [
   {
     id: "starters",
     name: "Starters",
@@ -49,7 +39,7 @@ const categories: Category[] = [
   },
 ];
 
-const menuItems: MenuItem[] = [
+export const menuItems: MenuItem[] = [
   // Starters
   {
     id: "starter-1",
@@ -327,80 +317,14 @@ const menuItems: MenuItem[] = [
   },
 ];
 
-const pairingRules: Record<string, { category: string; reason: string }[]> = {
-  "starters": [
-    { category: "main-course", reason: "Perfect pairing" },
-    { category: "drinks", reason: "Complete your meal" },
-  ],
-  "main-course": [
-    { category: "sides", reason: "Great complement" },
-    { category: "desserts", reason: "Sweet finish" },
-    { category: "drinks", reason: "Perfect pairing" },
-  ],
-  "desserts": [
-    { category: "drinks", reason: "Complete the experience" },
-  ],
-  "drinks": [
-    { category: "starters", reason: "Start with style" },
-    { category: "chefs-special", reason: "Chef's suggestion" },
-  ],
-  "chefs-special": [
-    { category: "drinks", reason: "Luxury pairing" },
-    { category: "desserts", reason: "Grand finale" },
-  ],
-  "sides": [
-    { category: "main-course", reason: "Perfect match" },
-    { category: "drinks", reason: "Refresh your palate" },
-  ],
-};
-
-export class MemStorage implements IStorage {
-  async getCategories(): Promise<Category[]> {
-    return categories;
-  }
-
-  async getMenuItems(): Promise<MenuItem[]> {
-    return menuItems;
-  }
-
-  async getMenuItemsByCategory(categoryId: string): Promise<MenuItem[]> {
-    return menuItems.filter((item) => item.categoryId === categoryId);
-  }
-
-  async getMenuItemById(itemId: string): Promise<MenuItem | undefined> {
-    return menuItems.find((item) => item.id === itemId);
-  }
-
-  async getCategoryById(categoryId: string): Promise<Category | undefined> {
-    return categories.find((cat) => cat.id === categoryId);
-  }
-
-  async getRecommendations(itemId: string, categoryId: string): Promise<Recommendation[]> {
-    const rules = pairingRules[categoryId] || [];
-    const recommendations: Recommendation[] = [];
-    
-    for (const rule of rules) {
-      const categoryItems = menuItems.filter(
-        (item) => item.categoryId === rule.category && item.id !== itemId
-      );
-      
-      if (categoryItems.length > 0) {
-        const randomItem = categoryItems[Math.floor(Math.random() * categoryItems.length)];
-        recommendations.push({
-          id: randomItem.id,
-          name: randomItem.name,
-          description: randomItem.description,
-          price: randomItem.price,
-          image: randomItem.image,
-          reason: rule.reason,
-        });
-      }
-      
-      if (recommendations.length >= 3) break;
-    }
-    
-    return recommendations;
-  }
+export function getMenuItemsByCategory(categoryId: string): MenuItem[] {
+  return menuItems.filter((item) => item.categoryId === categoryId);
 }
 
-export const storage = new MemStorage();
+export function getCategoryById(categoryId: string): Category | undefined {
+  return categories.find((cat) => cat.id === categoryId);
+}
+
+export function getMenuItemById(itemId: string): MenuItem | undefined {
+  return menuItems.find((item) => item.id === itemId);
+}
