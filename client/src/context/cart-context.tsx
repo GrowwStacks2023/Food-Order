@@ -31,12 +31,26 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpenState, setIsCartOpenState] = useState(false);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [isRecommendationsOpen, setIsRecommendationsOpen] = useState(false);
+  const [isRecommendationsOpenState, setIsRecommendationsOpenState] = useState(false);
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
   const [lastAddedItem, setLastAddedItem] = useState<MenuItem | null>(null);
   const [cartBounce, setCartBounce] = useState(false);
+
+  const setIsCartOpen = useCallback((open: boolean) => {
+    if (open) {
+      setIsRecommendationsOpenState(false);
+    }
+    setIsCartOpenState(open);
+  }, []);
+
+  const setIsRecommendationsOpen = useCallback((open: boolean) => {
+    if (open) {
+      setIsCartOpenState(false);
+    }
+    setIsRecommendationsOpenState(open);
+  }, []);
 
   const addItem = useCallback((menuItem: MenuItem) => {
     setItems((current) => {
@@ -102,11 +116,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         getSubtotal,
         getTax,
         getTotal,
-        isCartOpen,
+        isCartOpen: isCartOpenState,
         setIsCartOpen,
         recommendations,
         setRecommendations,
-        isRecommendationsOpen,
+        isRecommendationsOpen: isRecommendationsOpenState,
         setIsRecommendationsOpen,
         isLoadingRecommendations,
         setIsLoadingRecommendations,
