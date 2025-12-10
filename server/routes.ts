@@ -59,23 +59,27 @@ export async function registerRoutes(
         if (webhookResponse.ok) {
           try {
             const webhookData = await webhookResponse.json();
+            console.log("Webhook response:", JSON.stringify(webhookData, null, 2));
             
             let items: any[] = [];
             if (Array.isArray(webhookData) && webhookData.length > 0) {
               items = webhookData;
             } else if (webhookData && typeof webhookData === "object" && Array.isArray(webhookData.recommendations) && webhookData.recommendations.length > 0) {
               items = webhookData.recommendations;
+            } else if (webhookData && typeof webhookData === "object" && !Array.isArray(webhookData)) {
+              items = [webhookData];
             }
             
             if (items.length > 0) {
               const recommendations = items.map((item: any) => ({
                 id: item.id || `rec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                name: item.name || "Recommended Item",
-                description: item.description || "",
-                price: item.price || 0,
-                image: item.image || "",
-                reason: item.reason || "Recommended for you",
+                name: item.name || item.product_name || item.item_name || "Recommended Item",
+                description: item.description || item.product_description || `Perfect pairing with ${item_name}`,
+                price: parseFloat(item.price) || parseFloat(item.product_price) || 0,
+                image: item.image || item.product_image || item.image_url || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80",
+                reason: item.reason || item.pairing_reason || "Perfect pairing",
               }));
+              console.log("Parsed recommendations:", JSON.stringify(recommendations, null, 2));
               webhookSuccess = true;
               return res.json(recommendations);
             }
