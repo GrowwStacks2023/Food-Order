@@ -20,11 +20,11 @@ export default function Home() {
   } = useCart();
   const { toast } = useToast();
 
-  const { data: categories = [], isLoading: categoriesLoading } = useQuery<Category[]>({
+  const { data: categories = [], isLoading: categoriesLoading, error: categoriesError, refetch: refetchCategories } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
-  const { data: menuItems = [], isLoading: menuItemsLoading } = useQuery<MenuItem[]>({
+  const { data: menuItems = [], isLoading: menuItemsLoading, error: menuItemsError, refetch: refetchMenuItems } = useQuery<MenuItem[]>({
     queryKey: ["/api/menu-items", selectedCategory],
     enabled: !!selectedCategory,
   });
@@ -100,6 +100,20 @@ export default function Home() {
     );
   }
 
+  if (categoriesError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-center px-4">
+          <p className="text-destructive text-lg">Failed to load menu</p>
+          <p className="text-muted-foreground">Please try again</p>
+          <Button onClick={() => refetchCategories()} data-testid="button-retry-categories">
+            Retry
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -128,6 +142,13 @@ export default function Home() {
             {menuItemsLoading ? (
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              </div>
+            ) : menuItemsError ? (
+              <div className="flex flex-col items-center justify-center py-12 gap-4">
+                <p className="text-destructive">Failed to load items</p>
+                <Button onClick={() => refetchMenuItems()} data-testid="button-retry-items">
+                  Retry
+                </Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
