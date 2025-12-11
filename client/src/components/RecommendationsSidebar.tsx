@@ -19,7 +19,7 @@ export function RecommendationsSidebar() {
   } = useCart();
   const { toast } = useToast();
 
-  const handleAddRecommendation = (rec: typeof recommendations[0]) => {
+  const handleAddRecommendation = (rec: (typeof recommendations)[0]) => {
     const menuItem = getMenuItemById(rec.id);
     if (menuItem) {
       addItem(menuItem);
@@ -48,106 +48,130 @@ export function RecommendationsSidebar() {
 
   return (
     <>
+      {/* Overlay */}
       <div
-        className="fixed inset-0 bg-black/50 z-50 animate-fade-in"
+        className="fixed inset-0 bg-black/60 z-50 animate-fade-in"
         onClick={() => setIsRecommendationsOpen(false)}
         data-testid="overlay-recommendations"
       />
+      
+      {/* Sidebar */}
       <div
-        className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-background border-l border-border z-50 animate-slide-in-right flex flex-col"
+        className="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-background z-50 animate-slide-in-right flex flex-col shadow-2xl"
         data-testid="sidebar-recommendations"
       >
-        <div className="flex items-center justify-between gap-4 p-4 sm:p-6 border-b border-border">
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-accent" />
-            <h2 className="font-serif text-xl sm:text-2xl font-bold">For You</h2>
+            <Sparkles className="w-5 h-5 text-primary" />
+            <h2 className="text-xl font-semibold">For You</h2>
           </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsRecommendationsOpen(false)}
+            className="rounded-full"
             data-testid="button-close-recommendations"
           >
             <X className="h-5 w-5" />
           </Button>
         </div>
 
+        {/* Content */}
         {isLoadingRecommendations ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-6">
+          <div className="flex-1 flex flex-col items-center justify-center p-8">
             <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground text-center">
-              Finding perfect pairings for {lastAddedItem?.name}...
+            <p className="text-sm text-muted-foreground text-center">
+              Finding perfect pairings for{" "}
+              <span className="font-medium text-foreground">{lastAddedItem?.name}</span>
             </p>
           </div>
         ) : recommendations.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-            <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center mb-4">
-              <Sparkles className="w-10 h-10 text-muted-foreground" />
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+              <Sparkles className="w-8 h-8 text-primary" />
             </div>
-            <h3 className="font-serif text-lg font-semibold mb-2">No recommendations yet</h3>
-            <p className="text-muted-foreground text-sm">
+            <h3 className="text-lg font-semibold mb-2">No recommendations yet</h3>
+            <p className="text-sm text-muted-foreground max-w-[280px]">
               Add items to your cart to get personalized suggestions
             </p>
           </div>
         ) : (
-          <ScrollArea className="flex-1 p-4 sm:p-6">
-            <div className="space-y-4">
+          <ScrollArea className="flex-1">
+            <div className="p-4 space-y-4">
+              {/* Context Banner */}
               {lastAddedItem && (
-                <p className="text-sm text-muted-foreground mb-4">
-                  Based on your selection of <span className="font-medium text-foreground">{lastAddedItem.name}</span>
-                </p>
+                <div className="bg-primary/5 border border-primary/20 rounded-lg p-3">
+                  <p className="text-xs text-muted-foreground">
+                    Perfect pairings for{" "}
+                    <span className="font-semibold text-foreground">
+                      {lastAddedItem.name}
+                    </span>
+                  </p>
+                </div>
               )}
-              {recommendations.map((rec) => (
-                <Card
-                  key={rec.id}
-                  className="overflow-visible"
-                  data-testid={`card-recommendation-${rec.id}`}
-                >
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-t-md">
-                    <img
-                      src={rec.image}
-                      alt={rec.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <Badge
-                      className="absolute top-3 left-3 bg-accent text-accent-foreground"
-                    >
-                      {rec.reason}
-                    </Badge>
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <h4 className="font-serif text-lg font-semibold">
-                        {rec.name}
-                      </h4>
-                      <span className="font-semibold text-lg whitespace-nowrap">
-                        ${rec.price.toFixed(2)}
-                      </span>
+
+              {/* Recommendations List */}
+              <div className="space-y-3">
+                {recommendations.map((rec) => (
+                  <Card
+                    key={rec.id}
+                    className="overflow-hidden hover:shadow-md transition-shadow"
+                    data-testid={`card-recommendation-${rec.id}`}
+                  >
+                    <div className="flex gap-4 p-4">
+                      {/* Image */}
+                      <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-muted">
+                        <img
+                          src={rec.image}
+                          alt={rec.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <Badge className="absolute top-1 right-1 text-xs px-2 py-0.5">
+                          {rec.reason}
+                        </Badge>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 flex flex-col">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h4 className="font-semibold text-sm leading-tight line-clamp-2">
+                            {rec.name}
+                          </h4>
+                          <span className="font-bold text-sm text-primary whitespace-nowrap">
+                            ${rec.price.toFixed(2)}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+                          {rec.description}
+                        </p>
+
+                        {/* Actions */}
+                        <div className="flex gap-2 mt-auto">
+                          <Button
+                            size="sm"
+                            className="flex-1 h-8 text-xs"
+                            onClick={() => handleAddRecommendation(rec)}
+                            data-testid={`button-add-recommendation-${rec.id}`}
+                          >
+                            Add to Cart
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 text-xs"
+                            onClick={() => setIsRecommendationsOpen(false)}
+                            data-testid={`button-dismiss-${rec.id}`}
+                          >
+                            Later
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                      {rec.description}
-                    </p>
-                    <div className="flex gap-2">
-                      <Button
-                        className="flex-1"
-                        onClick={() => handleAddRecommendation(rec)}
-                        data-testid={`button-add-recommendation-${rec.id}`}
-                      >
-                        Add to Cart
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setIsRecommendationsOpen(false);
-                        }}
-                        data-testid={`button-dismiss-${rec.id}`}
-                      >
-                        Maybe Later
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </Card>
+                ))}
+              </div>
             </div>
           </ScrollArea>
         )}
